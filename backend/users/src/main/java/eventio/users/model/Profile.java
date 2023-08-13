@@ -1,4 +1,4 @@
-package com.example.test.model;
+package eventio.users.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,19 +12,15 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
+@Table(name = "profiles")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class User {
+public class Profile {
     @Id
-    private UUID id = UUID.randomUUID();
-    @Column(unique = true)
-    private String email;
-    @Column
-    private String password;
+    private UUID id;
     @Column
     private String name;
     @Column
@@ -32,15 +28,17 @@ public class User {
     @Column
     private String phone;
     @Column
-    @Enumerated(EnumType.STRING)
-    private UserType userType;
-    @Column
-    private boolean active = false;
-    @Column
     @CreationTimestamp
     private LocalDateTime created;
     @Column
     @UpdateTimestamp
     private LocalDateTime lastUpdated;
+
+    public Profile(UUID id, String name, String address, String phone) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.example.test.model;
+package eventio.users.model;
 
 import jakarta.persistence.*;
 import lombok.*;
