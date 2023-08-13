@@ -8,6 +8,8 @@ import eventio.auth.model.AuthorityType;
 import eventio.auth.security.TokenHandler;
 import eventio.auth.service.account.AccountService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +21,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.attribute.UserPrincipal;
+import java.util.Objects;
 import java.util.UUID;
 
 @RequestMapping("/auth")
@@ -57,21 +58,35 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "Log in.")
-    public ResponseEntity login(@RequestBody LoginDto data) {
-        logger.info("Hello");
+    public ResponseEntity<TokenDto> login(@RequestBody LoginDto data, HttpServletResponse response) {
         Authentication authentication = this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         data.email(),
                         data.password()
                 )
         );
-        logger.info("test");
         SecurityContextHolder.getContext().setAuthentication(authentication);
         Account user = (Account) authentication.getPrincipal();
         String jwt = this.tokenHandler.generateToken(user.getId(), user.getEmail(), user.getAuthority());
-        ResponseCookie jwtCookie = tokenHandler.generateJwtCookie(user.getId().toString(), user.getAuthority().getAuthority());
+        ResponseCookie jwtCookie = tokenHandler.generateCookie("accessToken", jwt, "/api");
+        response.addCookie(new Cookie("accessToken", jwt));
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(new TokenDto(jwt));
+    }
+
+    @PostMapping("/logout")
+    @Operation(summary = "Log out.")
+    public ResponseEntity logout() {
+        ResponseCookie jwtCookie = tokenHandler.getCleanJwtCookie();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                .build();
+    }
+
+    @GetMapping("/current")
+    @Operation(summary = "Get the currently logged in user.")
+    public ResponseEntity<Account> getCurrent() {
+        return ResponseEntity.ok(this.accountService.getCurrent());
     }
 }

@@ -1,22 +1,29 @@
 package eventio.auth.service.account;
 
+import eventio.auth.controller.AuthController;
 import eventio.auth.exception.NotFoundException;
 import eventio.auth.exception.UnrecognizedAuthority;
 import eventio.auth.model.Account;
 import eventio.auth.model.AuthorityType;
 import eventio.auth.repository.AccountRepository;
 import eventio.auth.repository.AuthorityRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.attribute.UserPrincipal;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final AuthorityRepository authorityRepository;
+    private static Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 
     public AccountServiceImpl(AccountRepository accountRepository, AuthorityRepository authorityRepository) {
         this.accountRepository = accountRepository;

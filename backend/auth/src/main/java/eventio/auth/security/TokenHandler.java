@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
+import static java.rmi.server.LogStream.log;
+
 @Component
 @Slf4j
 public class TokenHandler {
@@ -34,7 +36,6 @@ public class TokenHandler {
         String jwt = generateTokenFromUsername(id, role);
         return generateCookie(jwtCookie, jwt, "/api");
     }
-
     public ResponseCookie generateRefreshJwtCookie(String refreshToken) {
         return generateCookie(jwtRefreshCookie, refreshToken, "/api/auth/refresh-token");
     }
@@ -60,7 +61,7 @@ public class TokenHandler {
     public String generateToken(UUID id, String email, Authority authority) {
         return Jwts.builder()
                 .setIssuer("eventio")
-                .setSubject(String.valueOf(email))
+                .setSubject(email)
                 .setAudience(generateAudience())
                 .setIssuedAt(new Date())
                 .claim("authority", authority.getAuthority())
@@ -76,15 +77,15 @@ public class TokenHandler {
             Jwts.parser().setSigningKey(SECRET).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
-            log.error("Invalid JWT signature: {}", e.getMessage());
+            TokenHandler.log.error("Invalid JWT signature: {}", e.getMessage());
         } catch (MalformedJwtException e) {
-            log.error("Invalid JWT token: {}", e.getMessage());
+            TokenHandler.log.error("Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
-            log.error("JWT token is expired: {}", e.getMessage());
+            TokenHandler.log.error("JWT token is expired: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            log.error("JWT token is unsupported: {}", e.getMessage());
+            TokenHandler.log.error("JWT token is unsupported: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty: {}", e.getMessage());
+            TokenHandler.log.error("JWT claims string is empty: {}", e.getMessage());
         }
 
         return false;
@@ -100,13 +101,14 @@ public class TokenHandler {
                 .compact();
     }
 
-    private ResponseCookie generateCookie(String name, String value, String path) {
+    public ResponseCookie generateCookie(String name, String value, String path) {
         return ResponseCookie.from(name, value).path(path).maxAge(24 * 60 * 60).httpOnly(true).build();
     }
 
     private String getCookieValueByName(HttpServletRequest request, String name) {
         Cookie cookie = WebUtils.getCookie(request, name);
         if (cookie != null) {
+            System.out.println(cookie.getValue());
             return cookie.getValue();
         } else {
             return null;

@@ -4,6 +4,7 @@ import eventio.auth.model.Account;
 import eventio.auth.model.AuthorityType;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.nio.file.attribute.UserPrincipal;
 import java.util.UUID;
 
 public interface AccountService extends UserDetailsService {

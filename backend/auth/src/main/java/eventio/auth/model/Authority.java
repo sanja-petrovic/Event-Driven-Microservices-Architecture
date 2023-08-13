@@ -24,6 +24,11 @@ public class Authority implements GrantedAuthority {
         return type.toString();
     }
 
+    @Override
+    public String toString() {
+        return type.toString();
+    }
+
     public Authority(AuthorityType type) {
         this.type = type;
     }

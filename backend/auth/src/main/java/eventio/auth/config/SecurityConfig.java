@@ -42,7 +42,15 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exceptionHandler -> exceptionHandler.authenticationEntryPoint(restAuthenticationEntryPoint))
+                .authorizeHttpRequests(requests ->
+                        requests.requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("swagger-ui/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("v3/api-docs/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
+                                .anyRequest().authenticated())
                 .addFilterBefore(new TokenAuthenticationFilter(tokenHandler, accountService), BasicAuthenticationFilter.class)
+                .anonymous(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .build();

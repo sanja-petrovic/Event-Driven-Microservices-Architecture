@@ -8,9 +8,10 @@ public class TokenBasedAuthentication extends AbstractAuthenticationToken {
     private String token;
     private final UserDetails principal;
 
-    public TokenBasedAuthentication(UserDetails principal) {
+    public TokenBasedAuthentication(UserDetails principal, String token) {
         super(principal.getAuthorities());
         this.principal = principal;
+        this.token = token;
     }
 
     public String getToken() {
