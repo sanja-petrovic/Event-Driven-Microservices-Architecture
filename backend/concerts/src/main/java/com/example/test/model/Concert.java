@@ -29,11 +29,18 @@ public class Concert {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime dateTime;
     @Column
-    private int attendance;
+    private int attendance = 0;
     @Column
     @CreationTimestamp
     private LocalDateTime created;
     @Column
     @UpdateTimestamp
     private LocalDateTime lastUpdated;
+
+    public Concert(String name, UUID venueId, String performer, LocalDateTime dateTime) {
+        this.name = name;
+        this.venueId = venueId;
+        this.performer = performer;
+        this.dateTime = dateTime;
+    }
 }
