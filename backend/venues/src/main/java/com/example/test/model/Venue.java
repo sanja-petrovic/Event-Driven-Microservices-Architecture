@@ -34,4 +34,9 @@ public class Venue {
     @Column
     @UpdateTimestamp
     private LocalDateTime lastUpdated;
+
+    public Venue(String name, String location) {
+        this.name = name;
+        this.location = location;
+    }
 }
