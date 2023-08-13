@@ -118,6 +118,17 @@ services:
       - POSTGRES_MULTIPLE_DATABASES=concerts,postgres:users,postgres:venues,postgres:tickets,postgres
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=postgres
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "petrovic.ra142.2019@uns.ac.rs"
+      PGADMIN_DEFAULT_PASSWORD: "password"
+    volumes:
+      - ./pgadmin/:/var/lib/pgadmin
   connect:
     image: debezium/connect
     ports:
