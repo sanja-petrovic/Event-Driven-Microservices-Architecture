@@ -71,6 +71,21 @@ services:
       - "zookeeper"
       - "kafdrop"
       - db
+  auth:
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    ports:
+      - "8086:8086"
+    environment:
+      DATABASE_URL: "jdbc:postgresql://db:5432/auth"
+      DATABASE_USER: "postgres"
+      DATABASE_PW: "password"
+    depends_on:
+      - "kafka"
+      - "zookeeper"
+      - "kafdrop"
+      - db
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
@@ -115,7 +130,7 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_MULTIPLE_DATABASES=concerts,postgres:users,postgres:venues,postgres:tickets,postgres
+      - POSTGRES_MULTIPLE_DATABASES=concerts,postgres:users,postgres:venues,postgres:tickets,postgres:auth,postgres
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=postgres
   pgadmin:
