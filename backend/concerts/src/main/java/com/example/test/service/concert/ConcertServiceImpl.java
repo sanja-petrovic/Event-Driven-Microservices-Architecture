@@ -57,6 +57,7 @@ public class ConcertServiceImpl implements ConcertService {
 
     @Override
     public List<Concert> search(String venueId, String performer) {
+        performer = performer.strip();
         boolean venueIdMissing = InputChecker.isBlankNullOrEmpty(venueId);
         boolean performerMissing = InputChecker.isBlankNullOrEmpty(performer);
         if (venueIdMissing && performerMissing) {
