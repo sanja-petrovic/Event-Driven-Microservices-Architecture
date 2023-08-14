@@ -39,12 +39,9 @@ public class ConcertController {
     @GetMapping("/{id}")
     @Operation(summary = "Find concert by ID.")
     public ResponseEntity<Concert> findById(@PathVariable String id) {
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping
-    @Operation(summary = "Create a new concert.")
-    public ResponseEntity create(@RequestBody CreateConcertDto data) {
-        return ResponseEntity.ok().build();
+        Mono<Concert> response = concertClient.get().uri(String.format("/concerts/%s", id)).retrieve().bodyToMono(new ParameterizedTypeReference<>() {
+        });
+        Concert concert = response.block();
+        return ResponseEntity.ok(concert);
     }
 }
