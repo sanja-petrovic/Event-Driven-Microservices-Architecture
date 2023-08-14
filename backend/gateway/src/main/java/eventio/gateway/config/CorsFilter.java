@@ -1,4 +1,4 @@
-package com.example.test.config;
+package eventio.gateway.config;
 
 
 
