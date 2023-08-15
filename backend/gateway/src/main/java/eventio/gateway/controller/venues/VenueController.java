@@ -17,10 +17,11 @@ import reactor.core.publisher.Mono;
 import java.util.Collections;
 import java.util.List;
 
+import static eventio.gateway.constants.WebClients.venueClient;
+
 @RequestMapping("/venues")
 @RestController
 public class VenueController {
-    private final WebClient venueClient = WebClient.builder().baseUrl(Routes.venuesPath).defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).defaultUriVariables(Collections.singletonMap("url", Routes.venuesPath)).build();
 
     @GetMapping
     @Operation(summary = "Find venues.")

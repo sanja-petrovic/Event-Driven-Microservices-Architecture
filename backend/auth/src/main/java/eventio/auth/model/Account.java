@@ -21,10 +21,9 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Account implements UserDetails {
     @Id
-    private UUID id;
+    private UUID id = UUID.randomUUID();
     @Column(unique = true)
     private String email;
     @Column
@@ -41,8 +40,7 @@ public class Account implements UserDetails {
     @UpdateTimestamp
     private LocalDateTime lastUpdated;
 
-    public Account(UUID id, String email, String password, Authority authority) {
-        this.id = id;
+    public Account(String email, String password, Authority authority) {
         this.email = email;
         this.password = password;
         this.authority = authority;

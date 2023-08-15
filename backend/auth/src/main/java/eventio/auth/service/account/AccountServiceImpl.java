@@ -1,12 +1,16 @@
 package eventio.auth.service.account;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
-import eventio.auth.controller.AuthController;
 import eventio.auth.exception.NotFoundException;
 import eventio.auth.exception.UnrecognizedAuthority;
 import eventio.auth.model.Account;
 import eventio.auth.model.AuthorityType;
+import eventio.auth.model.OutboxMessage;
 import eventio.auth.repository.AccountRepository;
 import eventio.auth.repository.AuthorityRepository;
+import eventio.auth.service.outbox.OutboxService;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +19,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.attribute.UserPrincipal;
 import java.util.UUID;
 
 @Service
@@ -24,16 +27,18 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final AuthorityRepository authorityRepository;
     private static Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
+    private final OutboxService outboxService;
 
-    public AccountServiceImpl(AccountRepository accountRepository, AuthorityRepository authorityRepository) {
+    public AccountServiceImpl(AccountRepository accountRepository, AuthorityRepository authorityRepository, OutboxService outboxService) {
         this.accountRepository = accountRepository;
         this.authorityRepository = authorityRepository;
+        this.outboxService = outboxService;
     }
 
     @Override
+    @Transactional
     public void register(UUID id, String email, String password, AuthorityType authorityType) {
         Account account = new Account(
-                id,
                 email,
                 password,
                 authorityRepository.findByType(authorityType).orElseThrow(() -> new UnrecognizedAuthority(authorityType.toString()))
@@ -42,7 +47,9 @@ public class AccountServiceImpl implements AccountService {
         if (AuthorityType.ADMIN == authorityType) {
             account.setActive(true);
         }
-        accountRepository.save(account);
+        Account savedAccount = accountRepository.save(account);
+        OutboxMessage outboxMessage = outboxService.generate("register", savedAccount);
+        outboxService.send(outboxMessage);
     }
 
     @Override

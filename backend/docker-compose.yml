@@ -31,7 +31,7 @@ services:
       context: ./concerts
       dockerfile: Dockerfile
     ports:
-      - "8083:8083"
+      - "8087:8087"
     environment:
       DATABASE_URL: "jdbc:postgresql://db:5432/concerts"
       DATABASE_USER: "postgres"
@@ -148,7 +148,7 @@ services:
   connect:
     image: debezium/connect
     ports:
-      - 8888:8888
+      - "8083:8083"
     environment:
       GROUP_ID: 1
       BOOTSTRAP_SERVERS: "kafka:9092"
@@ -161,5 +161,5 @@ services:
       - bash
       - -c
       - |
-        /scripts/create-postgres-source.sh connect 8888 &
+        /scripts/create-postgres-source.sh connect 8083 &
         /docker-entrypoint.sh start

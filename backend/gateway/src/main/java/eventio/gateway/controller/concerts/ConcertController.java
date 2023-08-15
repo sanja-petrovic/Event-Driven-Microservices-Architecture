@@ -1,24 +1,20 @@
 package eventio.gateway.controller.concerts;
 
-import eventio.gateway.constants.Routes;
 import eventio.gateway.model.Concert;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.Collections;
 import java.util.List;
+
+import static eventio.gateway.constants.WebClients.concertClient;
 
 @RequestMapping("/concerts")
 @RestController
 public class ConcertController {
 
-    private final WebClient concertClient = WebClient.builder().baseUrl(Routes.concertsPath).defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).defaultUriVariables(Collections.singletonMap("url", Routes.concertsPath)).build();
 
     @GetMapping
     @Operation(summary = "Find concerts. Optionally, filter by venue ID.")
