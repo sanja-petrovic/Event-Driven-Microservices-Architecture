@@ -24,6 +24,6 @@ public class AuthController {
     @PostMapping
     @Operation(summary = "Register a new user.")
     public void register(@RequestBody RegisterDto data) {
-        authClient.post().uri("/auth/register").body(BodyInserters.fromValue(data)).retrieve();
+        var response = authClient.post().uri("/auth/register").body(BodyInserters.fromValue(data)).retrieve().bodyToMono(String.class).block();
     }
 }
