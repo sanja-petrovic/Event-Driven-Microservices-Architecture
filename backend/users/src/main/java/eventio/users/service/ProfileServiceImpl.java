@@ -21,6 +21,11 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
+    public void register(Profile profile) {
+        this.repository.save(profile);
+    }
+
+    @Override
     public Profile findById(UUID id) {
         return this.repository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }

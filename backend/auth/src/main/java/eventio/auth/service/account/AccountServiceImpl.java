@@ -1,7 +1,7 @@
 package eventio.auth.service.account;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 
+import eventio.auth.dto.OutboxRegisterDto;
+import eventio.auth.dto.RegisterDto;
 import eventio.auth.exception.NotFoundException;
 import eventio.auth.exception.UnrecognizedAuthority;
 import eventio.auth.model.Account;
@@ -48,7 +48,23 @@ public class AccountServiceImpl implements AccountService {
             account.setActive(true);
         }
         Account savedAccount = accountRepository.save(account);
-        OutboxMessage outboxMessage = outboxService.generate("register", savedAccount);
+    }
+
+    @Override
+    @Transactional
+    public void register(RegisterDto data, String password, AuthorityType authorityType) {
+        Account account = new Account(
+                data.email(),
+                password,
+                authorityRepository.findByType(authorityType).orElseThrow(() -> new UnrecognizedAuthority(authorityType.toString()))
+
+        );
+        if (AuthorityType.ADMIN == authorityType) {
+            account.setActive(true);
+        }
+        Account savedAccount = accountRepository.save(account);
+        OutboxRegisterDto outboxPayload = new OutboxRegisterDto(savedAccount.getId(), data.name(), data.address(), data.phone());
+        OutboxMessage outboxMessage = outboxService.generate("register", outboxPayload);
         outboxService.send(outboxMessage);
     }
 

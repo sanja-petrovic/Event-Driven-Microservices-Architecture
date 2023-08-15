@@ -45,13 +45,13 @@ public class AuthController {
     @PostMapping("/register")
     @Operation(summary = "Register a new account.")
     public void registerClient(@RequestBody RegisterDto data) {
-        accountService.register(UUID.fromString(data.id()), data.email(), data.password(), AuthorityType.CLIENT);
+        accountService.register(data, passwordEncoder.encode(data.password()), AuthorityType.CLIENT);
     }
 
     @PostMapping("/admin")
     @Operation(summary = "Register a new admin account.")
     public void registerAdmin(@RequestBody RegisterDto data) {
-        accountService.register(UUID.fromString(data.id()), data.email(), passwordEncoder.encode(data.password()), AuthorityType.ADMIN);
+        accountService.register(data, passwordEncoder.encode(data.password()), AuthorityType.ADMIN);
     }
 
     @PostMapping("/login")
