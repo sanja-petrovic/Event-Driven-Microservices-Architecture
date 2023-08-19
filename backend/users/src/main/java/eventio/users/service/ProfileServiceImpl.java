@@ -4,6 +4,7 @@ import eventio.users.exception.NotFoundException;
 import eventio.users.model.Profile;
 import eventio.users.repository.ProfileRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -16,6 +17,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
+    @Transactional
     public void register(UUID id, String name, String address, String phone) {
         this.repository.save(new Profile(id, name, address, phone));
     }

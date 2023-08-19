@@ -12,5 +12,5 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public abstract class Event {
-    private UUID id;
+    private UUID id = UUID.randomUUID();
 }

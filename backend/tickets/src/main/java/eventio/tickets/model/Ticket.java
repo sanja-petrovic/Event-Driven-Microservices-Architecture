@@ -27,6 +27,8 @@ public class Ticket {
     @Column
     private int seat;
     @Column
+    private double priceInEuros;
+    @Column
     @Enumerated(EnumType.STRING)
     private TicketStatus status = TicketStatus.AVAILABLE;
     @Column
@@ -35,6 +37,8 @@ public class Ticket {
     @Column
     @UpdateTimestamp
     private LocalDateTime lastUpdated;
+    @Version
+    private Long version;
 
     public Ticket(UUID concertId, int seat) {
         this.concertId = concertId;

@@ -3,6 +3,7 @@ package eventio.tickets.service.venues;
 import eventio.tickets.model.Venue;
 import eventio.tickets.repository.VenueRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -15,6 +16,7 @@ public class VenueServiceImpl implements VenueService {
     }
 
     @Override
+    @Transactional
     public void save(UUID id, int capacity) {
         this.repository.save(new Venue(id, capacity));
     }

@@ -10,8 +10,8 @@ import eventio.concerts.repository.ConcertRepository;
 import eventio.concerts.service.outbox.OutboxService;
 import eventio.concerts.util.DateTimeParser;
 import eventio.concerts.util.InputChecker;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +32,7 @@ public class ConcertServiceImpl implements ConcertService {
         Concert concert = this.repository.save(new Concert(data.name(), UUID.fromString(data.venueId()), data.performer(), DateTimeParser.parse(data.dateTime())));
         Event event = new ConcertCreatedEvent(
                 concert.getId(), concert.getVenueId());
+        event.setId(concert.getId());
         OutboxMessage outboxMessage = this.outboxService.generate("concertCreated", event);
         this.outboxService.save(outboxMessage);
     }

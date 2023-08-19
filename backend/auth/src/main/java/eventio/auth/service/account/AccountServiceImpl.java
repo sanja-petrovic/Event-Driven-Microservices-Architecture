@@ -10,7 +10,6 @@ import eventio.auth.model.OutboxMessage;
 import eventio.auth.repository.AccountRepository;
 import eventio.auth.repository.AuthorityRepository;
 import eventio.auth.service.outbox.OutboxService;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,15 +17,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 @Service
 @Slf4j
 public class AccountServiceImpl implements AccountService {
+    private static Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
     private final AccountRepository accountRepository;
     private final AuthorityRepository authorityRepository;
-    private static Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
     private final OutboxService outboxService;
 
     public AccountServiceImpl(AccountRepository accountRepository, AuthorityRepository authorityRepository, OutboxService outboxService) {
@@ -66,15 +66,6 @@ public class AccountServiceImpl implements AccountService {
         OutboxRegisterDto outboxPayload = new OutboxRegisterDto(savedAccount.getId(), data.name(), data.address(), data.phone());
         OutboxMessage outboxMessage = outboxService.generate("register", outboxPayload);
         outboxService.send(outboxMessage);
-    }
-
-    @Override
-    public void login(String email, String password) {
-        /*Authentication authentication = this.authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password)
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        Account account = (Account) authentication.getPrincipal();*/
     }
 
     @Override

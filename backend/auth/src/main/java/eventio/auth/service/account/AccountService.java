@@ -13,8 +13,6 @@ public interface AccountService extends UserDetailsService {
     void register(UUID id, String email, String password, AuthorityType authorityType);
     void register(RegisterDto data, String password, AuthorityType authorityType);
 
-    void login(String email, String password);
-
     Account getCurrent();
 
     void logout();
