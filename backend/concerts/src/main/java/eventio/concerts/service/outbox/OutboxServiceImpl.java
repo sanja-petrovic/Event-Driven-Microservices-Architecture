@@ -1,11 +1,11 @@
-package com.example.test.service.outbox;
+package eventio.concerts.service.outbox;
 
-import com.example.test.event.Event;
-import com.example.test.model.OutboxMessage;
-import com.example.test.repository.OutboxRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import eventio.concerts.event.Event;
+import eventio.concerts.model.OutboxMessage;
+import eventio.concerts.repository.OutboxRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +25,7 @@ public class OutboxServiceImpl implements OutboxService {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public void save(OutboxMessage message) {
         this.repository.save(message);

@@ -158,9 +158,9 @@ services:
       STATUS_STORAGE_TOPIC: my_connect_statuses
     volumes:
       - ./connectors:/scripts
-    command:
-      - bash
-      - -c
-      - |
-        /scripts/create-postgres-source.sh connect 8083 &
-        /docker-entrypoint.sh start
+    # command:
+    #  - bash
+    #  - -c
+    #  - |
+    #    /scripts/create-postgres-source.sh connect 8083 &
+    #    /docker-entrypoint.sh start

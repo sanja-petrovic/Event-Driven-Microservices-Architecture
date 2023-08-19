@@ -1,8 +1,7 @@
-package eventio.auth.model;
+package eventio.tickets.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -13,36 +12,31 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class OutboxMessage {
     @Id
     private UUID id = UUID.randomUUID();
     @Column
-    private String aggregateType = "auth";
+    private String aggregateType;
     @Column
-    private UUID aggregateId;
+    private String aggregateId;
     @Column
     private String type;
     @Column
-    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime timestamp;
     @Column
-    private String correlationId = String.valueOf(UUID.randomUUID());
-    @Column(columnDefinition = "TEXT")
+    private String correlationId;
+    @Column
     private String payload;
 
     @Builder
-    public OutboxMessage(String aggregateType, UUID aggregateId, String type, LocalDateTime timestamp, String correlationId, String payload) {
+    public OutboxMessage(String aggregateType, String aggregateId, String type, LocalDateTime timestamp, String correlationId, String payload) {
         this.aggregateType = aggregateType;
         this.aggregateId = aggregateId;
         this.type = type;
         this.timestamp = timestamp;
         this.correlationId = correlationId;
-        this.payload = payload;
-    }
-
-    public OutboxMessage(String type, UUID aggregateId, String payload) {
-        this.type = type;
-        this.aggregateId = aggregateId;
         this.payload = payload;
     }
 }

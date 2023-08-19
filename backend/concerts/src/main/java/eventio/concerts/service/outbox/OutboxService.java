@@ -1,10 +1,9 @@
-package com.example.test.service.outbox;
+package eventio.concerts.service.outbox;
 
-import com.example.test.event.Event;
-import com.example.test.model.OutboxMessage;
+import eventio.concerts.event.Event;
+import eventio.concerts.model.OutboxMessage;
 
 public interface OutboxService {
     OutboxMessage generate(String type, Event event);
-
     void save(OutboxMessage message);
 }

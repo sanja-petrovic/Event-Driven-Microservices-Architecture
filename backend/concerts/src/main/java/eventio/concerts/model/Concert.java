@@ -1,9 +1,6 @@
-package com.example.test.model;
+package eventio.concerts.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,21 +12,24 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "venues")
+@Table(name = "concerts")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-
-public class Venue {
+@NoArgsConstructor
+public class Concert {
     @Id
     private UUID id = UUID.randomUUID();
     @Column
     private String name;
     @Column
-    private String location;
+    private UUID venueId;
     @Column
-    private int capacity;
+    private String performer;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime dateTime;
+    @Column
+    private int attendance = 0;
     @Column
     @CreationTimestamp
     private LocalDateTime created;
@@ -37,9 +37,10 @@ public class Venue {
     @UpdateTimestamp
     private LocalDateTime lastUpdated;
 
-    public Venue(String name, String location, int capacity) {
+    public Concert(String name, UUID venueId, String performer, LocalDateTime dateTime) {
         this.name = name;
-        this.location = location;
-        this.capacity = capacity;
+        this.venueId = venueId;
+        this.performer = performer;
+        this.dateTime = dateTime;
     }
 }

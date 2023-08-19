@@ -1,9 +1,6 @@
-package com.example.test.model;
+package eventio.tickets.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,21 +12,23 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "venues")
+@Table(name = "tickets")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class Venue {
+public class Ticket {
     @Id
     private UUID id = UUID.randomUUID();
     @Column
-    private String name;
+    private UUID userId;
     @Column
-    private String location;
+    private UUID concertId;
     @Column
-    private int capacity;
+    private int seat;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private TicketStatus status = TicketStatus.AVAILABLE;
     @Column
     @CreationTimestamp
     private LocalDateTime created;
@@ -37,9 +36,8 @@ public class Venue {
     @UpdateTimestamp
     private LocalDateTime lastUpdated;
 
-    public Venue(String name, String location, int capacity) {
-        this.name = name;
-        this.location = location;
-        this.capacity = capacity;
+    public Ticket(UUID concertId, int seat) {
+        this.concertId = concertId;
+        this.seat = seat;
     }
 }
