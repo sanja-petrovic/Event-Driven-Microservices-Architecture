@@ -1,5 +1,6 @@
 package eventio.gateway.controller.concerts;
 
+import eventio.gateway.dto.ConcertDto;
 import eventio.gateway.model.Concert;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.core.ParameterizedTypeReference;
@@ -18,12 +19,12 @@ public class ConcertController {
 
     @GetMapping
     @Operation(summary = "Find concerts. Optionally, filter by venue ID.")
-    public ResponseEntity<List<Concert>> findAll(@RequestParam(required = false) String venueId, @RequestParam(required = false) String performer) {
+    public ResponseEntity<List<ConcertDto>> findAll(@RequestParam(required = false) String venueId, @RequestParam(required = false) String performer) {
         venueId = venueId == null ? "" : venueId;
         performer = performer == null ? "" : performer;
-        Mono<List<Concert>> response = concertClient.get().uri(String.format("/concerts?venueId=%s&performer=%s", venueId, performer)).retrieve().bodyToMono(new ParameterizedTypeReference<List<Concert>>() {
+        Mono<List<ConcertDto>> response = concertClient.get().uri(String.format("/concerts?venueId=%s&performer=%s", venueId, performer)).retrieve().bodyToMono(new ParameterizedTypeReference<>() {
         });
-        List<Concert> concerts = response.block();
+        List<ConcertDto> concerts = response.block();
         return ResponseEntity.ok(concerts);
     }
 

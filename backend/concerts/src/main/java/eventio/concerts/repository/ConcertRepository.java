@@ -9,7 +9,8 @@ import java.util.UUID;
 
 @Repository
 public interface ConcertRepository extends JpaRepository<Concert, UUID> {
-    List<Concert> findAllByVenueId(UUID venueId);
-    List<Concert> findAllByPerformerContainsIgnoreCase(String performer);
-    List<Concert> findAllByVenueIdAndPerformerContainsIgnoreCase(UUID venueId, String performer);
+    List<Concert> findAllByOrderByDateTimeAsc();
+    List<Concert> findAllByVenueIdOrderByDateTimeAsc(UUID venueId);
+    List<Concert> findAllByPerformerContainsIgnoreCaseOrderByDateTimeAsc(String performer);
+    List<Concert> findAllByVenueIdAndPerformerContainsIgnoreCaseOrderByDateTimeAsc(UUID venueId, String performer);
 }

@@ -1,0 +1,58 @@
+@import '../../../styles/variables.scss';
+
+.searchBarContainer {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  width: 1240px;
+  filter: drop-shadow(rgba(149, 157, 165, 0.15) 0px 8px 24px);
+}
+
+.searchContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  flex-direction: column;
+}
+
+.centerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 1240px;
+}
+
+.filters {
+  display: flex;
+  width: 100%;
+  max-width: 1240px;
+  flex-direction: column;
+  gap: 2rem;
+  flex-wrap: wrap;
+  label {
+    margin-left: 0 !important;
+  }
+  &__amenities {
+    &__items {
+      margin-top: 1rem;
+    }
+  }
+  &__priceRange {
+    &__inputs {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+  }
+}
+
+.list {
+  width: 1240px;
+  background-color: white;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  box-shadow: $box-shadow;
+}

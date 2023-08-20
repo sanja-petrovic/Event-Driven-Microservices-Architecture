@@ -39,7 +39,7 @@ public class ConcertServiceImpl implements ConcertService {
 
     @Override
     public List<Concert> findAll() {
-        return this.repository.findAll();
+        return this.repository.findAllByOrderByDateTimeAsc();
     }
 
     @Override
@@ -49,17 +49,17 @@ public class ConcertServiceImpl implements ConcertService {
 
     @Override
     public List<Concert> findAllByVenue(UUID venueId) {
-        return this.repository.findAllByVenueId(venueId);
+        return this.repository.findAllByVenueIdOrderByDateTimeAsc(venueId);
     }
 
     @Override
     public List<Concert> findAllByPerformer(String performer) {
-        return this.repository.findAllByPerformerContainsIgnoreCase(performer);
+        return this.repository.findAllByPerformerContainsIgnoreCaseOrderByDateTimeAsc(performer);
     }
 
     @Override
     public List<Concert> findAllByVenueAndPerformer(UUID venueId, String performer) {
-        return this.repository.findAllByVenueIdAndPerformerContainsIgnoreCase(venueId, performer);
+        return this.repository.findAllByVenueIdAndPerformerContainsIgnoreCaseOrderByDateTimeAsc(venueId, performer);
     }
 
     @Override
