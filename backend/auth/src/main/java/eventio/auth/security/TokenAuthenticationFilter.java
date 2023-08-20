@@ -16,9 +16,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
+    private static final Logger logger = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
     private final TokenHandler tokenHandler;
     private final AccountService accountService;
-    private static final Logger logger = LoggerFactory.getLogger(TokenAuthenticationFilter.class);
 
     public TokenAuthenticationFilter(TokenHandler tokenHandler, AccountService accountService) {
         this.tokenHandler = tokenHandler;
@@ -28,8 +28,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-                try {
-            String jwt = tokenHandler.getJwtFromCookies(request);
+        try {
+            String jwt = tokenHandler.getJwtFromHeader(request);
             if (jwt != null && !jwt.equals("") && tokenHandler.validateJwtToken(jwt)) {
                 String username = tokenHandler.getUserNameFromJwtToken(jwt);
 

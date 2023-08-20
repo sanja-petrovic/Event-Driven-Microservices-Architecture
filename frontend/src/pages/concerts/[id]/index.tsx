@@ -6,7 +6,7 @@ export default function ConcertPage() {
   const { id } = router.query;
   return (
     <>
-      <ConcertOverview id={id} />
+      <ConcertOverview id={id as string} />
     </>
   );
 }

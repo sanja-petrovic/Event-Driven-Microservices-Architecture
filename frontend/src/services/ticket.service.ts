@@ -7,3 +7,6 @@ export const findAllTicketsByConcert = async (concertId: string) =>
 
 export const checkTicketAvailability = async (ticketId: string) =>
   await api.get(`${path}/${ticketId}/availability`);
+
+export const selectTicket = async (ticketId: string) =>
+  await api.post(`${path}/${ticketId}/select`);

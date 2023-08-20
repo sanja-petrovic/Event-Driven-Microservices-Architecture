@@ -6,10 +6,12 @@ import { findConcertById } from '@/services/concert.service';
 import {
   checkTicketAvailability,
   findAllTicketsByConcert,
+  selectTicket,
 } from '@/services/ticket.service';
 import { Divider } from 'antd';
 import classNames from 'classnames';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import styles from '../styles/concerts.module.scss';
@@ -22,6 +24,7 @@ const ConcertOverview = ({ id }: ConcertOverviewProps) => {
   const [concert, setConcert] = useState<Concert>();
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [selected, setSelected] = useState<string>();
+  const router = useRouter();
 
   const getTickets = () => {
     findAllTicketsByConcert(id)
@@ -41,6 +44,14 @@ const ConcertOverview = ({ id }: ConcertOverviewProps) => {
     }
   }, [tickets, concert, id]);
 
+  const handleContinue = () => {
+    if (selected) {
+      selectTicket(selected)
+        .then(() => router.push(`/tickets/${selected}/purchase`))
+        .catch((error) => console.log(error));
+    }
+  };
+
   const handleSelect = async (id: string) => {
     if (selected == id) {
       setSelected(undefined);
@@ -54,6 +65,7 @@ const ConcertOverview = ({ id }: ConcertOverviewProps) => {
               'Unfortunately, the selected ticket is not available anymore. Please try a different one.'
             );
             getTickets();
+            setSelected(undefined);
           }
         })
         .catch((error) => console.log(error));
@@ -95,6 +107,7 @@ const ConcertOverview = ({ id }: ConcertOverviewProps) => {
         type="primary"
         text="Purchase selected seat"
         disabled={!selected}
+        action={handleContinue}
         style={{
           marginTop: '2rem',
           textTransform: 'uppercase',

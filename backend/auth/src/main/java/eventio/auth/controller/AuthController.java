@@ -67,7 +67,6 @@ public class AuthController {
         Account user = (Account) authentication.getPrincipal();
         String jwt = this.tokenHandler.generateToken(user.getId(), user.getEmail(), user.getAuthority());
         ResponseCookie jwtCookie = tokenHandler.generateCookie("accessToken", jwt, "/api");
-        response.addCookie(new Cookie("accessToken", jwt));
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .body(new TokenDto(jwt));

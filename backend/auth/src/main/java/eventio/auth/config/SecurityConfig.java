@@ -43,7 +43,9 @@ public class SecurityConfig {
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exceptionHandler -> exceptionHandler.authenticationEntryPoint(restAuthenticationEntryPoint))
                 .authorizeHttpRequests(requests ->
-                        requests.requestMatchers(new AntPathRequestMatcher("/auth/**")).permitAll()
+                        requests.requestMatchers(new AntPathRequestMatcher("/auth/login")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/auth/register")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/auth/logout")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("swagger-ui/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("v3/api-docs/**")).permitAll()

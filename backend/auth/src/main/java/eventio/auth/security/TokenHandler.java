@@ -44,6 +44,10 @@ public class TokenHandler {
         return getCookieValueByName(request, jwtCookie);
     }
 
+    public String getJwtFromHeader(HttpServletRequest request) {
+        return request.getHeader("Authorization").split(" ")[1];
+    }
+
     public String getJwtRefreshFromCookies(HttpServletRequest request) {
         return getCookieValueByName(request, jwtRefreshCookie);
     }

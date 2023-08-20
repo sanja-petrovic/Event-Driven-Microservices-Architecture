@@ -17,9 +17,8 @@ const Login = () => {
     login(form.getFieldsValue() as Login)
       .then((response) => {
         localStorage.setItem('jwt', response.data.jwt);
-        api.defaults.headers.common.Authorization =
+        api.defaults.headers.common['Authorization'] =
           'Bearer ' + response.data.jwt;
-        router.push('/').then(() => router.reload());
       })
       .catch((error) => console.log(error));
   };

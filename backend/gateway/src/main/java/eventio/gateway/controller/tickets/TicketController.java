@@ -3,6 +3,7 @@ package eventio.gateway.controller.tickets;
 import eventio.gateway.dto.UserIdDto;
 import eventio.gateway.model.Ticket;
 import eventio.gateway.model.Venue;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +13,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.UUID;
 
-import static eventio.gateway.constants.WebClients.ticketClient;
-import static eventio.gateway.constants.WebClients.venueClient;
+import static eventio.gateway.constants.WebClients.*;
 
 @RequestMapping("/tickets")
 @RestController
@@ -35,17 +35,23 @@ public class TicketController {
     }
 
     @PostMapping("/{id}/select")
-    public void confirmSelection(@PathVariable UUID id, @RequestBody UserIdDto data) {
-        ticketClient.post().uri(String.format("/tickets/%s/select", id)).body(BodyInserters.fromValue(data)).retrieve().bodyToMono(String.class).block();
+    public void confirmSelection(@PathVariable UUID id, HttpServletRequest request) {
+        Mono<UserIdDto> currentMono = authClient.get().uri("/auth/current").header("Authorization", request.getHeader("Authorization")).header("Cookie", request.getHeader("Cookie")).retrieve().bodyToMono(new ParameterizedTypeReference<>() {
+        });
+        UserIdDto current = currentMono.block();
+        ticketClient.post().uri(String.format("/tickets/%s/select", id)).body(BodyInserters.fromValue(current)).retrieve().bodyToMono(String.class).block();
     }
 
     @PostMapping("/{id}/purchase")
-    public void confirmPurchase(@PathVariable UUID id, @RequestBody UserIdDto data) {
-        ticketClient.post().uri(String.format("/tickets/%s/purchase", id)).body(BodyInserters.fromValue(data)).retrieve().bodyToMono(String.class).block();
+    public void confirmPurchase(@PathVariable UUID id) {
+        Mono<UserIdDto> currentMono = authClient.get().uri("/auth/current").retrieve().bodyToMono(new ParameterizedTypeReference<>() {
+        });
+        UserIdDto current = currentMono.block();
+        ticketClient.post().uri(String.format("/tickets/%s/purchase", id)).body(BodyInserters.fromValue(current)).retrieve().bodyToMono(String.class).block();
     }
 
     @PostMapping("/{id}/cancel")
-    public void confirmPurchase(@PathVariable UUID id) {
+    public void cancelPurchase(@PathVariable UUID id) {
         ticketClient.post().uri(String.format("/tickets/%s/cancel", id)).retrieve().bodyToMono(String.class).block();
     }
 }
