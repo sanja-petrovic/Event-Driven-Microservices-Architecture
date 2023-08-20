@@ -10,7 +10,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Logo from '../../../assets/logo.png';
 import Button from '../button/Button';
-import NavigationLink from '../navigationLink/NavigationLink';
 import styles from './NavigationBar.module.scss';
 
 const NavigationBar = () => {
@@ -58,9 +57,7 @@ const NavigationBar = () => {
           />
         </Link>
       </div>
-      <div className={styles.links}>
-        <NavigationLink href="/" text="Home" />
-      </div>
+      <div className={styles.links}></div>
       <div className={styles.buttons}>
         <Link href="/signup">
           <Button type="primary" text="Sign up" />

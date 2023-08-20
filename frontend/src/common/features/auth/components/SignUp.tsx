@@ -1,3 +1,6 @@
+import Button from '@/common/components/button/Button';
+import { Register } from '@/model/Register';
+import { register } from '@/services/auth.service';
 import {
   HomeOutlined,
   LockOutlined,
@@ -12,10 +15,18 @@ import styles from '../styles/auth.module.scss';
 const SignUp = () => {
   const [form] = Form.useForm();
   const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const handleFinish = () => {
+    console.log(form.getFieldsValue());
+    register(form.getFieldsValue() as Register)
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error));
+  };
+
   return (
     <div className={styles.wrapper}>
       <h1 className={styles.title}>Sign up</h1>
-      <Form form={form} className={styles.loginForm}>
+      <Form form={form} className={styles.loginForm} onFinish={handleFinish}>
         <Form.Item
           name="name"
           rules={[{ required: true, message: 'Name is required.' }]}
@@ -77,6 +88,7 @@ const SignUp = () => {
             }}
           />
         </Form.Item>
+        <Button type="primary" text="Sign up" style={{ width: '100%' }} />
       </Form>
     </div>
   );
