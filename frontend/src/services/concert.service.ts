@@ -9,3 +9,6 @@ export const findAllConcerts = async (venueId?: string, performer?: string) => {
   });
   return await api.get(`${path}?${params}`);
 };
+
+export const findConcertById = async (id: string) =>
+  await api.get(`${path}/${id}`);

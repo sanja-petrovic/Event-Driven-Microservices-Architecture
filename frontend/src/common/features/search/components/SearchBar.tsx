@@ -118,7 +118,14 @@ const SearchBar = () => {
         className={styles.list}
         dataSource={concerts}
         renderItem={(concert) => (
-          <List.Item key={concert.id} actions={[<a key="more">Get tickets</a>]}>
+          <List.Item
+            key={concert.id}
+            actions={[
+              <a href={`/concerts/${concert.id}`} key="more">
+                Get tickets
+              </a>,
+            ]}
+          >
             <List.Item.Meta
               title={concert.name}
               description={dayjs(concert.dateTime).format(

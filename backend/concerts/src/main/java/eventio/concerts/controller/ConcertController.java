@@ -32,8 +32,9 @@ public class ConcertController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Find concert by ID.")
-    public ResponseEntity<Concert> findById(@PathVariable String id) {
-        return ResponseEntity.ok(this.service.findById(UUID.fromString(id)));
+    public ResponseEntity<ConcertDto> findById(@PathVariable String id) {
+        Concert concert = this.service.findById(UUID.fromString(id));
+        return ResponseEntity.ok(new ConcertDto(concert.getId(), concert.getName(), concert.getPerformer(), concert.getVenueId(), DateTimeParser.format(concert.getDateTime()), concert.getAttendance()));
     }
 
     @PostMapping

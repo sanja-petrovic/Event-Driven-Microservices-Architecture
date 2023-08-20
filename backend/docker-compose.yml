@@ -63,6 +63,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8085:8085"
+      - "5055:5055"
     environment:
       DATABASE_URL: "jdbc:postgresql://db:5432/tickets"
       DATABASE_USER: "postgres"
@@ -150,6 +151,7 @@ services:
     image: debezium/connect
     ports:
       - "8083:8083"
+      - "5053:5053"
     environment:
       GROUP_ID: 1
       BOOTSTRAP_SERVERS: "kafka:9092"

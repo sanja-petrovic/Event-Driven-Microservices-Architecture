@@ -1,0 +1,76 @@
+@import '../../../styles/variables.scss';
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.info {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  h2 {
+    margin-bottom: 0;
+  }
+}
+
+.stage {
+  margin-top: 1rem;
+  background-color: rgb(200, 200, 222);
+  width: 1240px;
+  height: 100px;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  p {
+    color: rgb(148, 148, 189);
+    text-transform: uppercase;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 20px;
+    margin-left: 20px;
+  }
+}
+
+.seatingPlan {
+  margin-top: 1rem;
+  display: flex;
+  max-width: 1240px;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.seat {
+  padding: 1.5rem;
+  border-radius: 100%;
+  border: 0px solid;
+  background-color: $secondary-color;
+  transition: 0.2s;
+}
+
+.taken {
+  background-color: rgb(140, 134, 148);
+}
+
+.taken:hover {
+  background-color: rgb(140, 134, 148) !important;
+}
+
+.seat:hover {
+  background-color: $secondary-color-hover;
+}
+
+.selected {
+  background-color: $primary-color;
+}
+
+.selected:hover {
+  background-color: $primary-color-hover !important;
+}

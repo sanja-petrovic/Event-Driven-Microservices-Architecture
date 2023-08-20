@@ -30,10 +30,10 @@ public class ConcertController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Find concert by ID.")
-    public ResponseEntity<Concert> findById(@PathVariable String id) {
-        Mono<Concert> response = concertClient.get().uri(String.format("/concerts/%s", id)).retrieve().bodyToMono(new ParameterizedTypeReference<>() {
+    public ResponseEntity<ConcertDto> findById(@PathVariable String id) {
+        Mono<ConcertDto> response = concertClient.get().uri(String.format("/concerts/%s", id)).retrieve().bodyToMono(new ParameterizedTypeReference<>() {
         });
-        Concert concert = response.block();
+        ConcertDto concert = response.block();
         return ResponseEntity.ok(concert);
     }
 }

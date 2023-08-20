@@ -33,4 +33,10 @@ public class AuthController {
         TokenDto token = response.block();
         return ResponseEntity.ok(token);
     }
+
+    @PostMapping("/logout")
+    @Operation(summary = "Log out.")
+    public void logout() {
+        authClient.post().uri("/auth/logout").retrieve().bodyToMono(String.class).block();
+    }
 }

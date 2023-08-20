@@ -1,48 +1,37 @@
-import {
-  IdcardOutlined,
-  LockOutlined,
-  LogoutOutlined,
-  MailOutlined,
-} from '@ant-design/icons';
-import { MenuProps } from 'antd';
+import { logout } from '@/services/auth.service';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import Logo from '../../../assets/logo.png';
 import Button from '../button/Button';
 import styles from './NavigationBar.module.scss';
 
 const NavigationBar = () => {
   const router = useRouter();
+  const [authState, setAuthState] = useState<boolean>();
 
-  const items: MenuProps['items'] = [
-    {
-      key: '1',
-      label: 'View profile',
-      onClick: () => router.push('/profile'),
-      icon: <IdcardOutlined />,
-    },
-    {
-      key: '2',
-      label: 'Change email',
-      onClick: () => router.push('/email/change'),
-      icon: <MailOutlined />,
-    },
-    {
-      key: '3',
-      label: 'Change password',
-      onClick: () => router.push('/password/change'),
-      icon: <LockOutlined />,
-    },
-    {
-      type: 'divider',
-    },
-    {
-      key: '4',
-      label: 'Log out',
-      icon: <LogoutOutlined />,
-    },
-  ];
+  useEffect(() => {
+    const setAuth = () => {
+      setAuthState(localStorage.getItem('jwt') !== undefined);
+    };
+    setAuth();
+    window.addEventListener('storage', setAuth);
+
+    return () => {
+      window.removeEventListener('storage', setAuth);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    logout()
+      .then(() => {
+        localStorage.clear();
+        setAuthState(false);
+      })
+      .catch((error) => console.log(error));
+  };
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.logo}>
@@ -59,12 +48,18 @@ const NavigationBar = () => {
       </div>
       <div className={styles.links}></div>
       <div className={styles.buttons}>
-        <Link href="/signup">
-          <Button type="primary" text="Sign up" />
-        </Link>
-        <Link href="/login">
-          <Button type="secondary" text="Log in" />
-        </Link>
+        {authState ? (
+          <Button type="secondary" text="Log out" action={handleLogout} />
+        ) : (
+          <>
+            <Link href="/signup">
+              <Button type="primary" text="Sign up" />
+            </Link>
+            <Link href="/login">
+              <Button type="secondary" text="Log in" />
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );

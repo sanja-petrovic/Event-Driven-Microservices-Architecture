@@ -17,7 +17,6 @@ const SignUp = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handleFinish = () => {
-    console.log(form.getFieldsValue());
     register(form.getFieldsValue() as Register)
       .then((response) => console.log(response))
       .catch((error) => console.log(error));

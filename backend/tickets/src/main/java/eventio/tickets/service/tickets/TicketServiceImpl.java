@@ -10,6 +10,7 @@ import eventio.tickets.repository.VenueRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -35,6 +36,11 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Ticket findById(UUID id) {
         return this.ticketRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+    }
+
+    @Override
+    public List<Ticket> findAllByConcertId(UUID concertId) {
+        return this.ticketRepository.findAllByConcertIdOrderBySeatAsc(concertId);
     }
 
 

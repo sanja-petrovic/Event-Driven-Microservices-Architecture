@@ -95,3 +95,31 @@ a {
   -webkit-user-select: none;
   -ms-user-select: none;
 }
+.title {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 100%;
+  letter-spacing: 1.12px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.title-bigger {
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 100%;
+  letter-spacing: 1.12px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%;
+  letter-spacing: 1.12px;
+  text-transform: uppercase;
+}
