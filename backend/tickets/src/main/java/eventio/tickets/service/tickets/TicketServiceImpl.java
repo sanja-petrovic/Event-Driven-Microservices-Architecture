@@ -60,16 +60,19 @@ public class TicketServiceImpl implements TicketService {
             this.ticketRepository.save(ticket);
             TimerTask task = new TimerTask() {
                 public void run() {
-                    if (TicketStatus.SELECTED.equals(ticket.getStatus())) {
-                        System.out.println("Resetting...");
-                        ticket.setStatus(TicketStatus.AVAILABLE);
-                        ticket.setUserId(null);
-                        ticketRepository.save(ticket);
+                    try {
+                        if (TicketStatus.SELECTED.equals(ticket.getStatus())) {
+                            System.out.println("Resetting...");
+                            ticket.setStatus(TicketStatus.AVAILABLE);
+                            ticket.setUserId(null);
+                            ticketRepository.save(ticket);
+                        }
+                    } catch(Exception e) {
+                        System.out.println(e.getLocalizedMessage());
                     }
                 }
             };
             Timer timer = new Timer("Timer");
-
             long delay = TimeUnit.MINUTES.toMillis(1);
             timer.schedule(task, delay);
         }

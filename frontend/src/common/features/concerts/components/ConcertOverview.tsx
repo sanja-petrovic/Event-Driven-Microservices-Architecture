@@ -44,11 +44,21 @@ const ConcertOverview = ({ id }: ConcertOverviewProps) => {
     }
   }, [tickets, concert, id]);
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (selected) {
-      selectTicket(selected)
-        .then(() => router.push(`/tickets/${selected}/purchase`))
-        .catch((error) => console.log(error));
+      await checkTicketAvailability(selected).then((response) => {
+        if (response.data == true) {
+          selectTicket(selected)
+            .then(() => router.push(`/tickets/${selected}/purchase`))
+            .catch((error) => console.log(error));
+        } else {
+          toast.error(
+            'Unfortunately, the selected ticket is not available anymore. Please try a different one.'
+          );
+          getTickets();
+          setSelected(undefined);
+        }
+      });
     }
   };
 
