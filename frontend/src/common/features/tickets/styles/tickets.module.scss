@@ -1,0 +1,63 @@
+@import '../../../styles/variables.scss';
+.ticket {
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;
+  box-shadow: $box-shadow;
+  background-color: white;
+  width: 30vw;
+  margin-top: 2rem;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 1rem 2rem;
+}
+
+.text {
+  font-size: 12px;
+  margin-top: 0;
+}
+
+.footer {
+  display: flex;
+  width: 100%;
+  background-image: linear-gradient(
+    to right,
+    $secondary-color 0%,
+    $primary-color 100%
+  );
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  justify-content: center;
+  padding: 1rem;
+  background-size: 200% auto;
+  transition: 0.5s;
+  cursor: pointer;
+  button {
+    text-transform: uppercase;
+    color: white;
+    font-weight: 700;
+    letter-spacing: 1.12px;
+  }
+}
+
+.footer:hover {
+  background-position: right center;
+  background-image: linear-gradient(
+    to right,
+    $secondary-color-hover 0%,
+    $primary-color-hover 100%
+  );
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

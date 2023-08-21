@@ -1,4 +1,4 @@
-import TicketOverview from '@/common/features/tickets/TicketOverview';
+import TicketOverview from '@/common/features/tickets/components/TicketOverview';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 

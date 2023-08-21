@@ -34,6 +34,14 @@ public class TicketController {
         return ResponseEntity.ok(tickets);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Ticket> findById(@PathVariable UUID id) {
+        Mono<Ticket> response = ticketClient.get().uri(String.format("/tickets/%s", id)).retrieve().bodyToMono(new ParameterizedTypeReference<>() {
+        });
+        Ticket ticket = response.block();
+        return ResponseEntity.ok(ticket);
+    }
+
     @PostMapping("/{id}/select")
     public void confirmSelection(@PathVariable UUID id, HttpServletRequest request) {
         Mono<UserIdDto> currentMono = authClient.get().uri("/auth/current").header("Authorization", request.getHeader("Authorization")).header("Cookie", request.getHeader("Cookie")).retrieve().bodyToMono(new ParameterizedTypeReference<>() {
@@ -43,8 +51,8 @@ public class TicketController {
     }
 
     @PostMapping("/{id}/purchase")
-    public void confirmPurchase(@PathVariable UUID id) {
-        Mono<UserIdDto> currentMono = authClient.get().uri("/auth/current").retrieve().bodyToMono(new ParameterizedTypeReference<>() {
+    public void confirmPurchase(@PathVariable UUID id, HttpServletRequest request) {
+        Mono<UserIdDto> currentMono = authClient.get().uri("/auth/current").header("Authorization", request.getHeader("Authorization")).header("Cookie", request.getHeader("Cookie")).retrieve().bodyToMono(new ParameterizedTypeReference<>() {
         });
         UserIdDto current = currentMono.block();
         ticketClient.post().uri(String.format("/tickets/%s/purchase", id)).body(BodyInserters.fromValue(current)).retrieve().bodyToMono(String.class).block();

@@ -24,6 +24,11 @@ public class TicketController {
         return ResponseEntity.ok(this.ticketService.findAllByConcertId(concertId));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Ticket> findById(@PathVariable UUID id) {
+        return ResponseEntity.ok(this.ticketService.findById(id));
+    }
+
     @GetMapping("/{id}/availability")
     public ResponseEntity<Boolean> checkAvailability(@PathVariable UUID id) {
         return ResponseEntity.ok(this.ticketService.checkAvailability(id));
