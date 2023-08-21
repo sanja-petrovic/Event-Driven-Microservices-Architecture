@@ -44,9 +44,7 @@ public class AccountServiceImpl implements AccountService {
                 authorityRepository.findByType(authorityType).orElseThrow(() -> new UnrecognizedAuthority(authorityType.toString()))
 
         );
-        if (AuthorityType.ADMIN == authorityType) {
-            account.setActive(true);
-        }
+        account.setActive(true);
         Account savedAccount = accountRepository.save(account);
     }
 
@@ -59,9 +57,7 @@ public class AccountServiceImpl implements AccountService {
                 authorityRepository.findByType(authorityType).orElseThrow(() -> new UnrecognizedAuthority(authorityType.toString()))
 
         );
-        if (AuthorityType.ADMIN == authorityType) {
-            account.setActive(true);
-        }
+        account.setActive(true);
         Account savedAccount = accountRepository.save(account);
         OutboxRegisterDto outboxPayload = new OutboxRegisterDto(savedAccount.getId(), data.name(), data.address(), data.phone());
         OutboxMessage outboxMessage = outboxService.generate("register", outboxPayload);

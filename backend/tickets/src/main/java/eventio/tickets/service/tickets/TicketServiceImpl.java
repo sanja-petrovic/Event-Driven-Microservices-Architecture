@@ -10,8 +10,8 @@ import eventio.tickets.repository.VenueRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class TicketServiceImpl implements TicketService {
@@ -54,9 +54,25 @@ public class TicketServiceImpl implements TicketService {
     @Transactional
     public void confirmSelection(UUID ticketId, UUID userId) {
         Ticket ticket = this.findById(ticketId);
-        ticket.setUserId(userId);
-        ticket.setStatus(TicketStatus.SELECTED);
-        this.ticketRepository.save(ticket);
+        if (TicketStatus.AVAILABLE.equals(ticket.getStatus())) {
+            ticket.setUserId(userId);
+            ticket.setStatus(TicketStatus.SELECTED);
+            this.ticketRepository.save(ticket);
+            TimerTask task = new TimerTask() {
+                public void run() {
+                    if (TicketStatus.SELECTED.equals(ticket.getStatus())) {
+                        System.out.println("Resetting...");
+                        ticket.setStatus(TicketStatus.AVAILABLE);
+                        ticket.setUserId(null);
+                        ticketRepository.save(ticket);
+                    }
+                }
+            };
+            Timer timer = new Timer("Timer");
+
+            long delay = TimeUnit.MINUTES.toMillis(1);
+            timer.schedule(task, delay);
+        }
     }
 
     @Override

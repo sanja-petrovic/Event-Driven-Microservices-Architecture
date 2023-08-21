@@ -26,8 +26,8 @@ const TicketOverview = ({ id }: TicketOverviewProps) => {
   const [ticket, setTicket] = useState<Ticket>();
   const [concert, setConcert] = useState<Concert>();
   const [venue, setVenue] = useState<Venue>();
-  const [timeLeft, setTimeLeft] = useState(60 * 10);
-  const intervalRef = useRef(); // Add a ref to store the interval id
+  const [timeLeft, setTimeLeft] = useState(60 * 1);
+  const intervalRef = useRef();
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
