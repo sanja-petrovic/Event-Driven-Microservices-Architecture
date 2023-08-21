@@ -9,16 +9,18 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { Form, Input } from 'antd';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import styles from '../styles/auth.module.scss';
 
 const SignUp = () => {
   const [form] = Form.useForm();
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const router = useRouter();
 
   const handleFinish = () => {
     register(form.getFieldsValue() as Register)
-      .then((response) => console.log(response))
+      .then((response) => router.push('/login'))
       .catch((error) => console.log(error));
   };
 

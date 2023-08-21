@@ -49,14 +49,18 @@ const NavigationBar = () => {
       <div className={styles.links}></div>
       <div className={styles.buttons}>
         {authState ? (
-          <Button type="secondary" text="Log out" action={handleLogout} />
+          <Button type="transparent" text="Log out" action={handleLogout} />
         ) : (
           <>
             <Link href="/signup">
               <Button type="primary" text="Sign up" />
             </Link>
             <Link href="/login">
-              <Button type="secondary" text="Log in" />
+              <Button
+                type="transparent"
+                text="Log in"
+                style={{ marginLeft: '1rem' }}
+              />
             </Link>
           </>
         )}
