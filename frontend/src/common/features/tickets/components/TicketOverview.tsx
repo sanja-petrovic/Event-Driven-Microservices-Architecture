@@ -11,9 +11,12 @@ import {
 import { findVenue } from '@/services/venue.service';
 import { Divider } from 'antd';
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 import styles from '../styles/tickets.module.scss';
+dayjs.extend(duration);
 
 interface TicketOverviewProps {
   id: string;
@@ -23,6 +26,26 @@ const TicketOverview = ({ id }: TicketOverviewProps) => {
   const [ticket, setTicket] = useState<Ticket>();
   const [concert, setConcert] = useState<Concert>();
   const [venue, setVenue] = useState<Venue>();
+  const [timeLeft, setTimeLeft] = useState(60 * 10);
+  const intervalRef = useRef(); // Add a ref to store the interval id
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setTimeLeft((t) => t - 1);
+    }, 1000);
+
+    return () => clearInterval(intervalRef.current);
+  }, []);
+
+  // Add a listener to `timeLeft`
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      toast.error('Expired!');
+      clearInterval(intervalRef.current);
+      router.push(`/concerts/${ticket?.concertId}`);
+    }
+  }, [timeLeft]);
+
   const router = useRouter();
   useEffect(() => {
     getTicket(id)
@@ -78,7 +101,13 @@ const TicketOverview = ({ id }: TicketOverviewProps) => {
           <Button type="transparent" text="Purchase" action={handlePurchase} />
         </div>
       </div>
-      <Divider style={{ marginTop: '2rem' }}>OR</Divider>
+      <div className={styles.timer}>
+        <p>
+          Time left to purchase:{' '}
+          <b>{dayjs.duration(timeLeft, 'seconds').format('mm:ss')}</b>
+        </p>
+      </div>
+      <Divider style={{ marginTop: '1rem' }}>OR</Divider>
       <Button
         type="transparent"
         style={{ marginTop: '1rem' }}
